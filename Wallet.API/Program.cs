@@ -21,6 +21,7 @@ builder.Services.AddDbContext<WalletContext>(opt => opt.UseSqlServer(configurati
 // DI
 builder.Services.AddScoped<IAuthorization, authorizationRepository>();
 builder.Services.AddScoped<IComputerHMAC, computerHMACRepository>();
+builder.Services.AddScoped<IGetAllInfoAboutUsers, getAllInfoAboutUsersRepository>();
 
 var app = builder.Build();
 

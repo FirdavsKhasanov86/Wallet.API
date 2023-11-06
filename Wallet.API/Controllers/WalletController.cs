@@ -10,10 +10,11 @@ namespace Wallet.API.Controllers
     public class WalletController : ControllerBase
     {
         private readonly IAuthorization _authorRepo;
-        public WalletController(IAuthorization authorRepo)
+        private readonly IGetAllInfoAboutUsers _getAllUsersRepo;
+        public WalletController(IAuthorization authorRepo, IGetAllInfoAboutUsers getAllUsersRepo)
         {
             _authorRepo = authorRepo;
-       
+            _getAllUsersRepo = getAllUsersRepo;
         }
         [HttpPost]
         [Route("authorization")]
@@ -24,6 +25,16 @@ namespace Wallet.API.Controllers
                 return NotFound();
             }
             return Ok(await _authorRepo.AuthorizationRequest(authorizationRequest));
+
+        }
+
+        [HttpGet]
+        [Route("GetAllInfoAboutUsers")]
+        public async Task<IEnumerable<SendAllUsers>> GetAllInfoAboutUsers()
+        {
+
+            var getAllUsers = await _getAllUsersRepo.GetAllInfoAboutUsersAsync();
+            return getAllUsers.ToList();
 
         }
     }
