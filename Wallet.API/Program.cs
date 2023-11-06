@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Wallet.API.Data;
+using Wallet.API.Interface;
+using Wallet.API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<WalletContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
     b => b.MigrationsAssembly("Wallet.API")));
+
+// DI
+builder.Services.AddScoped<IAuthorization, authorizationRepository>();
+builder.Services.AddScoped<IComputerHMAC, computerHMACRepository>();
 
 var app = builder.Build();
 
