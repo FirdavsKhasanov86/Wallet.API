@@ -14,15 +14,20 @@ namespace Wallet.API.Controllers
         private readonly IEditUserAccount _editUserAccountRepo;
         private readonly IGetUserAuthorizedAccount _getUserAuthorizedAccountRepo;
         private readonly IAuthenticationUser _authUserRepo;
+        private readonly IDebitBankAccount _debBankAccountRepo;
+        private readonly IHistoryCheckBalanceAccounts _histCheckBalAccRepo;
         public WalletController(IAuthorization authorRepo, IGetAllInfoAboutUsers getAllUsersRepo,
             IEditUserAccount editUserAccountRepo, IGetUserAuthorizedAccount getUserAuthorizedAccountRepo,
-            IAuthenticationUser authUserRepo)
+            IAuthenticationUser authUserRepo, IDebitBankAccount debBankAccountRepo,
+            IHistoryCheckBalanceAccounts histCheckBalAccRepo)
         {
             _authorRepo = authorRepo;
             _getAllUsersRepo = getAllUsersRepo;
             _editUserAccountRepo = editUserAccountRepo;
             _getUserAuthorizedAccountRepo = getUserAuthorizedAccountRepo;
             _authUserRepo = authUserRepo;
+            _debBankAccountRepo = debBankAccountRepo;
+            _histCheckBalAccRepo = histCheckBalAccRepo;
         }
         [HttpPost]
         [Route("authorization")]
@@ -75,6 +80,24 @@ namespace Wallet.API.Controllers
             if (userAuth == null) { NotFound(); };
             return Ok(userAuth);
 
+        }
+
+        [HttpPost]
+        [Route("debit")]
+        public async Task<IActionResult> DebitBankAccount([FromBody] BankAccountRequest bankAccountRequest)
+        {
+            if (bankAccountRequest == null) { return NotFound(); }
+
+            return Ok(await _debBankAccountRepo.DebitBankAccountAsync(bankAccountRequest));
+        }
+
+
+        [HttpGet]
+        [Route("HistoryCheckBalance/{userId}")]
+        public async Task<IEnumerable<TransactionResponse>> HistoryCheckBalanceAccounts(Guid userId)
+        {
+            var getHistCheckBalAccnt = await _histCheckBalAccRepo.HistoryCheckBalanceAccountsAsync(userId);
+            return getHistCheckBalAccnt;
         }
     }
 }

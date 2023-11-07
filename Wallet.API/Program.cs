@@ -25,6 +25,8 @@ builder.Services.AddScoped<IGetAllInfoAboutUsers, getAllInfoAboutUsersRepository
 builder.Services.AddTransient<IEditUserAccount, editUsersAccountRepository>();
 builder.Services.AddTransient<IGetUserAuthorizedAccount, getUserAuthorizedAccountRepository>();
 builder.Services.AddScoped<IAuthenticationUser, authenticationUserRepository>();
+builder.Services.AddScoped<IDebitBankAccount, debitBankAccountRepository>();
+builder.Services.AddScoped<IHistoryCheckBalanceAccounts, historyCheckBalanceAccountsRepository>();
 
 var app = builder.Build();
 
